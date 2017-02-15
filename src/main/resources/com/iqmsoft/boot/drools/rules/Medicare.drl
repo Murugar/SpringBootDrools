@@ -1,0 +1,53 @@
+package com.iqmsoft.boot.drools.rules
+
+import com.iqmsoft.boot.drools.facts.*;
+
+declare IsSenior
+	person: Person
+end
+declare IsAdult
+	person: Person
+end
+declare IsChild
+	person: Person
+end
+
+rule IsChildPolicy when
+    p : Person( age < 16 )
+then
+    insertLogical( new IsChild( p ) );
+end
+
+rule IsAdultPolicy when
+    p : Person( age >= 16 && age < 65)
+then
+    insertLogical( new IsAdult( p ) );
+end
+
+rule IsSeniorPolicy when
+    p : Person( age >= 65)
+then
+    insertLogical( new IsSenior( p ) );
+end
+
+
+rule IssueChildMedicarePass when
+    p : Person()
+    IsChild( person == p )
+then
+    insertLogical( new ChildMedicarePass( p ) );
+end
+
+rule IssueAdultMedicarePass when
+    p : Person()
+    IsAdult( person == p )
+then
+    insertLogical( new AdultMedicarePass( p ) );
+end
+
+rule IssueSeniorMedicarePass when
+    p : Person()
+    IsSenior( person == p )
+then
+    insertLogical( new SeniorMedicarePass( p ) );
+end
